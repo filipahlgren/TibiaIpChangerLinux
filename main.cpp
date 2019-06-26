@@ -58,10 +58,11 @@ void help(){
 	std::cout << "Commands:" << std::endl;
 	std::cout << "\t-s, --server: Server IP-address" << std::endl;
 	std::cout << "\t-p, --port: Server port number" << std::endl;
-	std::cout << "\t-v, --version: Version of tibia client" << std::endl << std::endl;
+	std::cout << "\t-v, --version: Version of tibia client" << std::endl;
+	std::cout << "\t-n, --name: Process name" << std::endl << std::endl;
 	std::cout << "\t-h, --help: This help menu" << std::endl << std::endl;
 	std::cout << "Example:" << std::endl;
-	std::cout << "\t./example -s 127.0.0.1 -p 7777 -v 860" << std::endl;
+	std::cout << "\t./example -s 127.0.0.1 -p 7777 -v 860 -n Tibia" << std::endl;
 	std::cout << std::endl;
 }
 
@@ -90,12 +91,17 @@ int setArgs(int argc, char** argv){
 			strcmp("--version", argv[i]) == 0){
 				version = argv[i+1];
 		}
+
+		if (strcmp("-n", argv[i]) == 0 ||
+			strcmp("--name", argv[i]) == 0){
+				processName = argv[i+1];
+		}
 	}
 	return 1;
 }
 
 int writeToProcess(int fd, long int pid){
-	int *list = versionMap["860"];
+	int *list = versionMap[version.c_str()];
 	if (list == NULL) return -1;
 
 	//Write ip
@@ -128,7 +134,7 @@ int writeToMem(int fd, long int pid, const char* value, off_t addr){
 	ptrace(PTRACE_ATTACH, pid, 0, 0);
 	waitpid(pid, NULL, 0);
 
-	char empty[17] = "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0";
+	char empty[64] = "";
 	pwrite(fd, empty, sizeof(empty), addr);
 
 	int ret = pwrite(fd, value, (strlen(value)*sizeof(*value)), addr);
@@ -141,8 +147,8 @@ int writeToMem(int fd, long int pid, const char* value, off_t addr){
 int fdFromName(std::string name, long int &pid){
 	int LEN = 200;
 	char line[LEN];
-	char command[] = "pidof -s Tibia";
-	FILE *cmd = popen(command, "r");
+	std::string command = "pidof -s " + processName;
+	FILE *cmd = popen(command.c_str(), "r");
 
 	fgets(line, LEN, cmd);
 	pid = strtoul(line, NULL, 10);
