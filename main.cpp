@@ -61,7 +61,6 @@ void help(){
 	std::cout << "\t-s, --server: Server IP-address" << std::endl;
 	std::cout << "\t-p, --port: Server port number" << std::endl;
 	std::cout << "\t-v, --version: Version of tibia client" << std::endl;
-	std::cout << "\t-n, --name: Process name" << std::endl << std::endl;
 	std::cout << "\t-h, --help: This help menu" << std::endl << std::endl;
 	std::cout << "Example:" << std::endl;
 	std::cout << "\t./example -s 127.0.0.1 -p 7171 -v 860 -n Tibia" << std::endl;
@@ -82,6 +81,10 @@ int setArgs(int argc, char** argv){
 		if (strcmp("-s", argv[i]) == 0 ||
 			strcmp("--server", argv[i]) == 0){
 				ip = argv[i+1];
+				if(ip.length() > 64) {
+					std::cout << "Ip too long" << std::endl;
+					exit(1);
+				}
 		}
 
 		if (strcmp("-p", argv[i]) == 0 ||
@@ -94,10 +97,6 @@ int setArgs(int argc, char** argv){
 				version = argv[i+1];
 		}
 
-		if (strcmp("-n", argv[i]) == 0 ||
-			strcmp("--name", argv[i]) == 0){
-				processName = argv[i+1];
-		}
 	}
 	return 1;
 }
@@ -147,7 +146,7 @@ int writeToMem(int fd, long int pid, const char* value, off_t addr){
 int fdFromName(std::string name, long int &pid){
 	int LEN = 200;
 	char line[LEN];
-	std::string command = "pidof -s " + processName;
+	std::string command = "pidof -s Tibia";
 	FILE *cmd = popen(command.c_str(), "r");
 
 	fgets(line, LEN, cmd);
