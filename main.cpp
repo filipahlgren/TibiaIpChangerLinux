@@ -104,18 +104,16 @@ int writeToProcess(int fd, long int pid){
 	int *list = versionMap[version.c_str()];
 	if (list == NULL) return -1;
 
-	//Write ip
+	//Write ip and port
 	off_t baseAddress = (off_t)list[0];
 	for (int i = 0; i < list[2]; i++){
 		writeToMem(fd, pid, ip.c_str(), baseAddress);
+		writeToMem(fd, pid, port, baseAddress + list[2]);
 		baseAddress += (off_t)list[1];
 	}
 
-	//Write port
-	//possible port address: 0x85aa750
-
-	//writeRSA
-	writeToMem(fd, pid, rsaKey, (off_t)list[3]);
+	//write RSA
+	writeToMem(fd, pid, rsaKey, (off_t)list[4]);
 	return 1;
 }
 
