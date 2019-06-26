@@ -108,7 +108,7 @@ int writeToProcess(int fd, long int pid){
 
 	//Write ip and port
 	off_t baseAddress = (off_t)list[0];
-	for (int i = 0; i < list[2]; i++){
+	for (int i = 0; i < list[3]; i++){
 		writeToMem(fd, pid, ip.c_str(), baseAddress);
 		writeToMem(fd, pid, port, baseAddress + list[2]);
 		baseAddress += (off_t)list[1];
