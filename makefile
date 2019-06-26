@@ -1,4 +1,4 @@
 all:
-	g++ *.cpp -o launch
+	g++ main.cpp -o launch
 clear:
 	rm -f launch

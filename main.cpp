@@ -14,7 +14,7 @@
 std::string ip = "127.0.0.1";
 std::string version = "860";
 std::string processName = "Tibia";
-unsigned int port = 7777;
+unsigned int port = 7171;
 
 void help();
 int setArgs(int argc, char** argv);
@@ -62,7 +62,7 @@ void help(){
 	std::cout << "\t-n, --name: Process name" << std::endl << std::endl;
 	std::cout << "\t-h, --help: This help menu" << std::endl << std::endl;
 	std::cout << "Example:" << std::endl;
-	std::cout << "\t./example -s 127.0.0.1 -p 7777 -v 860 -n Tibia" << std::endl;
+	std::cout << "\t./example -s 127.0.0.1 -p 7171 -v 860 -n Tibia" << std::endl;
 	std::cout << std::endl;
 }
 
