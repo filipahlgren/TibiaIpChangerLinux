@@ -49,6 +49,8 @@ int main(int argc, char** argv){
 		return 0;
 	}
 
+	std::cout << "Ip changed" << std::endl;
+
 	close(fd);
 
 	return 0;
